@@ -1,0 +1,330 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "API documentation",
+		"description": "This API register and list users",
+		"version": "1.0.0",
+		"contact":{
+			"email": "fakeemail@gmail.com"
+		}
+	},
+	"paths": {
+		"/users":{
+			"post": {
+				"tags": ["Users"],
+				"summary": "Create user",
+				"description": "Create a new user",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema":{
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"email": {
+										"type": "string"
+									}
+								},
+								"example": {
+									"name": "José Maria",
+									"email": "josemaria@gmail.com"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "User created",
+						"content": {
+							"application/json": {
+								"schema":{
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"example": "fedebec-15-gette-789-as"
+										},
+										"name": {
+											"type": "string",
+											"example": "Maria José"
+										},
+										"email": {
+											"type": "string",
+											"example": "mj@gmail.com"
+										},
+										"admin": {
+											"type": "boolean",
+											"example": false
+										},	
+										"created_at": {
+											"type": "string",
+											"example": "2022-05-05"
+										}	,
+										"updated_at": {
+											"type": "string",
+											"example": "2022-05-05"
+										}										
+									}
+								}
+							}
+						}
+					},
+					"400":{
+						"description": "User already exists",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties":{
+										"error": {
+											"type": "string",
+											"example": "User already exists"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": ["Users"],
+				"summary": "List all users",
+				"description": "List all registered users if you are an admin",
+				"parameters":[
+					{
+					"in": "header",
+					"name": "user_id",
+          "schema":{
+						"type": "string",
+            "format": "uuid"          	
+						},
+						"required": true,
+						"description": "User id"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List all users",
+						"content": {
+							"application/json": {
+								"schema":{
+									"type": "array",
+									"items": {
+										"properties": {
+											"id": {
+												"type": "string",
+												"example": "fedebec-15-gette-789-as"
+											},
+											"name": {
+												"type": "string",
+												"example": "Maria José"
+											},
+											"email": {
+												"type": "string",
+												"example": "mj@gmail.com"
+											},
+											"admin": {
+												"type": "boolean",
+												"example": false
+											},	
+											"created_at": {
+												"type": "string",
+												"example": "2022-05-05"
+											}	,
+											"updated_at": {
+												"type": "string",
+												"example": "2022-05-05"
+											}	
+										}
+																			
+									}
+								}
+							}
+						}
+					},
+					"400":{
+						"description": "User is not an admin",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties":{
+										"error": {
+											"type": "string",
+											"example": "User is not admin"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404":{
+						"description": "User not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties":{
+										"error": {
+											"type": "string",
+											"example": "User not found"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},		
+		"/users/{user_id}":{
+			"get": {
+				"tags": ["Users"],
+				"summary": "Get user",
+				"description": "Get specific user info",
+				"parameters":[
+					{
+					"in": "path",
+					"name": "user_id",
+					"schema":{
+						"type": "string"
+						},
+						"required": true,
+						"description": "User id"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Return user",
+						"content": {
+							"application/json": {
+								"schema":{
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"example": "fedebec-15-gette-789-as"
+										},
+										"name": {
+											"type": "string",
+											"example": "Maria José"
+										},
+										"email": {
+											"type": "string",
+											"example": "mj@gmail.com"
+										},
+										"admin": {
+											"type": "boolean",
+											"example": false
+										},	
+										"created_at": {
+											"type": "string",
+											"example": "2022-05-05"
+										}	,
+										"updated_at": {
+											"type": "string",
+											"example": "2022-05-05"
+										}																				
+									}
+								}
+							}
+						}
+					},
+					"404":{
+						"description": "User not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties":{
+										"error": {
+											"type": "string",
+											"example": "User not found"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}			
+		},
+		"/users/{user_id}/admin":{
+			"patch": {
+				"tags": ["Users"],
+				"summary": "Turn user in admin",
+				"description": "Turn registered user into admin",
+				"parameters":[
+					{
+					"in": "path",
+					"name": "user_id",
+					"schema":{
+						"type": "string"
+						},
+						"required": true,
+						"description": "User id"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Return admin",
+						"content": {
+							"application/json": {
+								"schema":{
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"example": "fedebec-15-gette-789-as"
+										},
+										"name": {
+											"type": "string",
+											"example": "Maria José"
+										},
+										"email": {
+											"type": "string",
+											"example": "mj@gmail.com"
+										},
+										"admin": {
+											"type": "boolean",
+											"example": true
+										},	
+										"created_at": {
+											"type": "string",
+											"example": "2022-05-05"
+										}	,
+										"updated_at": {
+											"type": "string",
+											"example": "2022-05-05"
+										}																				
+									}
+								}
+							}
+						}
+					},
+					"404":{
+						"description": "User not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties":{
+										"error": {
+											"type": "string",
+											"example": "User not found"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}			
+		}
+	}
+}
